@@ -36,6 +36,56 @@ function clear-export{
     unset SERVICE_CONNECTION_STRING 
 }
 
+function get-headerinfo{
+param (
+    [string]$Subscription='' ,
+    [string]$GroupName='' ,
+    [string]$HubName='' ,
+    [string]$DeviceName=''
+    )
+        #SharedAccesKeyName
+        $SharedAccesKeyName='iothubowner'
+        write-Host 'Getting IOTHUB_DEVICE_CONN_STRING'
+       $cs = az iot hub device-identity connection-string show --hub-name $HubName --device-id $DeviceName  --output json  | out-string
+       $IOTHUB_DEVICE_CONN_STRING = ($cs   | ConvertFrom-Json).connectionString
+       write-Host $IOTHUB_DEVICE_CONN_STRING
+       $config= $IOTHUB_DEVICE_CONN_STRING.Split(";",[System.StringSplitOptions]::RemoveEmptyEntries)
+       if($config.Length -eq 3)
+       {
+            write-host ''
+            write-host 'Header Info: Device connecton for C header file for Azure SDK for C Arduino' -BackgroundColor Red  -ForegroundColor Yellow -nonewline
+            write-host ''
+            write-host 'Ref:    https://github.com/djaus2/Azure_IoT_Hub_Arduino_RPI_Pico_Telemetry'
+            write-host '...and  https://github.com/Azure/azure-sdk-for-c-arduino'
+            write-host ''
+            
+            $hostcon= $config[0].Split("=",[System.StringSplitOptions]::RemoveEmptyEntries)
+            if($hostcon.Length -eq 2)
+            {
+                $define0 = '#define IOT_CONFIG_IOTHUB_FQDN '
+                $husthub =  "{0} ""{1}""" -f $define0, $hostcon[1].Trim()
+                write-host $husthub
+            }
+            $dev= $config[1].Split("=",[System.StringSplitOptions]::RemoveEmptyEntries)
+            if($dev.Length -eq 2)
+            {
+                $define1 = '#define IOT_CONFIG_DEVICE_ID '
+                $deviceId =  "{0} ""{1}""" -f $define1, $dev[1].Trim()
+                write-host $deviceId
+            }
+            $key= $config[2].Split("=",[System.StringSplitOptions]::RemoveEmptyEntries)
+            if($key.Length -eq 2)
+            {
+                $define2 = '#define IOT_CONFIG_DEVICE_KEY '
+                $sharedkey = "{0} ""{1}=""" -f $define2, $key[1].Trim()
+                write-host $sharedkey
+            }
+            
+            write-host ''
+       }
+}
+
+
 function set-export{
     param (
     [string]$Subscription='' ,

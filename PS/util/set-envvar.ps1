@@ -689,6 +689,8 @@ function read-env{
     { 
         write-host 'No $env:REMOTE_PORT'  -ForeGroundColor DarkRed
     }
+    get-headerinfo $Subscription $GroupName $HubName $DeviceName
+    write-host ''
     write-Host 'Done reading Environment Variables'
     get-anykey
 
