@@ -22,7 +22,8 @@ namespace ReadD2cMessages
     internal class Program
     {
 
-        private static bool show_system_properties = true;
+        private static bool show_system_properties = false;
+        private static bool show_app_properties = false;
         // Event Hub-compatible endpoint
         // az iot hub show --query properties.eventHubEndpoints.events.endpoint --name {your IoT Hub name}
         ////private readonly static string s_eventHubsCompatibleEndpoint = "{your Event Hubs compatible endpoint}";
@@ -50,7 +51,8 @@ namespace ReadD2cMessages
 
         public static async Task Main(string[] args)
         {
-            show_system_properties = true;
+            show_system_properties = false;
+            show_app_properties = false;
             // Parse application parameters
 
             // Either the connection string must be supplied, or the set of endpoint, name, and shared access key must be.
@@ -120,10 +122,13 @@ namespace ReadD2cMessages
                     string data = Encoding.UTF8.GetString(partitionEvent.Data.Body.ToArray());
                     Console.WriteLine($"\tMessage body: {data}");
 
-                    Console.WriteLine("\tApplication properties (set by device):");
-                    foreach (KeyValuePair<string, object> prop in partitionEvent.Data.Properties)
+                    if (show_app_properties)
                     {
-                        PrintProperties(prop);
+                        Console.WriteLine("\tApplication properties (set by device):");
+                        foreach (KeyValuePair<string, object> prop in partitionEvent.Data.Properties)
+                        {
+                            PrintProperties(prop);
+                        }
                     }
                     if (show_system_properties)
                     {
@@ -144,11 +149,25 @@ namespace ReadD2cMessages
 
         private static void PrintProperties(KeyValuePair<string, object> prop)
         {
-            string propValue = prop.Value is DateTime
-                ? ((DateTime)prop.Value).ToString("O") // using a built-in date format here that includes milliseconds
-                : prop.Value.ToString();
+            try
+            {
+                Console.WriteLine(prop.Key);
+                if (prop.Value != null)
+                {
+                    string propValue = prop.Value is DateTime
+                        ? ((DateTime)prop.Value).ToString("O") // using a built-in date format here that includes milliseconds
+                        : prop.Value.ToString();
+                    Console.WriteLine($"\t\t{prop.Key}: {propValue}");
+                }
+                else
+                    Console.Write("propValue is null");
 
-            Console.WriteLine($"\t\t{prop.Key}: {propValue}");
+                
+            } catch (Exception ex)
+            { 
+            
+
+            }
         }
     }
 }

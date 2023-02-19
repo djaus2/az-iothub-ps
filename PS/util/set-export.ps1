@@ -162,7 +162,7 @@ function set-export{
     # EventHubsConnectionString
     write-host 'Calculating the Builtin Event Hub-Compatible Endpoint Connection String'
     # Endpoint=sb://<FQDN>/;SharedAccessKeyName=<KeyName>;SharedAccessKey=<KeyValue>
-    $cs = "Endpoint=sb://iothub-ns-qwerty-2862278-31b54ca8c2.servicebus.windows.net/;SharedAccessKeyName=iothubowner;SharedAccessKey=kVFKa00TrE6ExALK1CRSviyppoioTXhp4A2O3j5jd4Q=;EntityPath=qwerty"
+    $cs="Enpoint=$EventHubsCompatibleEndpoint;SharedAccessKeyName=$SharedAccesKeyName;SharedAccessKey=$EventHubsSasKey;EntityPath=$EventHubsCompatiblePath"
     $cs = trimm $cs
     $EventHubsConnectionString = $cs
     write-host $EventHubsConnectionString

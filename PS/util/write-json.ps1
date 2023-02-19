@@ -227,13 +227,22 @@ function write-json{
     Add-Content -Path  $PsScriptFile  -Value $op
 
     # EventHubsConnectionString
-    write-host 'Calculating the Builtin Event Hub-Compatible Endpoint Connection String'
-    # Endpoint=sb://<FQDN>/;SharedAccessKeyName=<KeyName>;SharedAccessKey=<KeyValue>
-    $cs = "Endpoint=sb://iothub-ns-qwerty-2862278-31b54ca8c2.servicebus.windows.net/;SharedAccessKeyName=iothubowner;SharedAccessKey=kVFKa00TrE6ExALK1CRSviyppoioTXhp4A2O3j5jd4Q=;EntityPath=qwerty"
-    $EventHubsConnectionString = $cs
-    write-host "10. EVENT_HUBS_CONNECTION_STRING:$EventHubsConnectionString"
+    If ([string]::IsNullOrEmpty($env:EVENT_HUBS_CONNECTION_STRING ))
+    {  
+        write-host 'Calculating the Builtin Event Hub-Compatible Endpoint Connection String'
+        $cs="Enpoint=$EventHubsCompatibleEndpoint;SharedAccessKeyName=$SharedAccesKeyName;SharedAccessKey=$EventHubsSasKey;EntityPath=$EventHubsCompatiblePath"
+        $EventHubsConnectionString = $cs
+    } else {
+        $EventHubsConnectionString = $env:EVENT_HUBS_CONNECTION_STRING 
+    }
+    write-host  "10. EVENT_HUBS_CONNECTION_STRING:$EventHubsConnectionString"
     $op = '            "EVENT_HUBS_CONNECTION_STRING":"' +"$EventHubsConnectionString" +'",'
+    
     Add-Content -Path  $PsScriptFile  -Value $op
+
+
+
+
 
     # The next two are only required by Device Streaming Proxy Hub
 

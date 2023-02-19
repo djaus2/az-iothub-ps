@@ -257,8 +257,8 @@ function write-env{
     # EventHubsConnectionString
     write-host 'Calculating the Builtin Event Hub-Compatible Endpoint Connection String'
     # Endpoint=sb://<FQDN>/;SharedAccessKeyName=<KeyName>;SharedAccessKey=<KeyValue>
-    $cs = "Endpoint=sb://iothub-ns-qwerty-2862278-31b54ca8c2.servicebus.windows.net/;SharedAccessKeyName=iothubowner;SharedAccessKey=kVFKa00TrE6ExALK1CRSviyppoioTXhp4A2O3j5jd4Q=;EntityPath=qwerty"
-    $EventHubsConnectionString = $cs
+    $cs="Enpoint=$EventHubsCompatibleEndpoint;SharedAccessKeyName=$SharedAccesKeyName;SharedAccessKey=$EventHubsSasKey;EntityPath=$EventHubsCompatiblePath"
+     $EventHubsConnectionString = $cs
     write-host "10. EVENT_HUBS_CONNECTION_STRING = $EventHubsConnectionString"
     $op = '$env:EVENT_HUBS_CONNECTION_STRING = "' + $EventHubsConnectionString +'"'
     Add-Content -Path  $PsScriptFile  -Value $op

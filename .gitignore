@@ -349,3 +349,11 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 /PS/launchSettings.json
+PS/app-settings.ps1
+PS/set-env.ps1
+PS/qs-apps/quickstarts/launchSettings.json
+PS/qs-apps/quickstarts/set-env.ps1
+PS/qs-apps/quickstarts/set-env.sh
+PS/qs-apps/quickstarts/telemetry/control-a-motor/read-d2c-messages/Properties/launchSettings.json
+PS/qs-apps/quickstarts/telemetry/telemetry/read-d2c-messages/Properties/launchSettings.json
+PS/qs-apps/quickstarts/telemetry/telemetry/read-d2c-messages/set-env.ps1
